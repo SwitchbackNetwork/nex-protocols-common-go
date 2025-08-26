@@ -18,7 +18,7 @@ type MessagingManager struct {
 	ValidateMessage    func(message types.DataHolder) (types.UInt64, types.UInt32, *nex.Error)
 	GetMessageHeader   func(message types.DataHolder) (messaging_types.UserMessage, *nex.Error)
 	SetMessageHeader   func(message types.DataHolder, header messaging_types.UserMessage) (types.DataHolder, *nex.Error)
-	ProcessMessage     func(message types.DataHolder, recipientID types.UInt64, recipientType types.UInt32, sendMessage bool) (types.DataHolder, types.List[types.UInt32], types.List[types.PID], *nex.Error)
+	ProcessMessage     func(manager *MessagingManager, message types.DataHolder, recipientIDs types.List[types.UInt64], recipientType types.UInt32, sendMessage bool) (types.DataHolder, types.List[types.UInt32], types.List[types.PID], *nex.Error)
 }
 
 // ValidateUserMessage checks if a UserMessage is valid, and returns its validity and the recipient information of the message
@@ -27,9 +27,7 @@ func (mm *MessagingManager) ValidateUserMessage(userMessage messaging_types.User
 		return 0, 0, nex.NewError(nex.ResultCodes.Core.InvalidArgument, "Message subject is too long")
 	}
 
-	//  Check that the specified recipient is valid
 	recipientID, recipientType := GetUserMessageRecipientData(mm.Endpoint.Server.LibraryVersions.Messaging, userMessage)
-
 	return recipientID, recipientType, nil
 }
 

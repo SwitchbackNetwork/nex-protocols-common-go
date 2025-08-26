@@ -2,7 +2,6 @@ package message_delivery
 
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
-	"github.com/PretendoNetwork/nex-go/v2/types"
 	message_delivery "github.com/PretendoNetwork/nex-protocols-go/v2/message-delivery"
 	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	messaging_database "github.com/PretendoNetwork/nex-protocols-common-go/v2/messaging/database"
@@ -12,7 +11,6 @@ type CommonProtocol struct {
 	endpoint              nex.EndpointInterface
 	protocol              message_delivery.Interface
 	manager               *common_globals.MessagingManager
-	OnAfterDeliverMessage func(packet nex.PacketInterface, oUserMessage types.DataHolder)
 }
 
 // SetManager defines the messaging manager to be used by the common protocol
@@ -22,9 +20,7 @@ func (commonProtocol *CommonProtocol) SetManager(manager *common_globals.Messagi
 	commonProtocol.manager = manager
 
 	if manager.ProcessMessage == nil {
-		manager.ProcessMessage = func(message types.DataHolder, recipientID types.UInt64, recipientType types.UInt32, sendMessage bool) (types.DataHolder, types.List[types.UInt32], types.List[types.PID], *nex.Error) {
-			return messaging_database.ProcessMessage(manager, message, recipientID, recipientType, sendMessage)
-		}
+		manager.ProcessMessage = messaging_database.ProcessMessage
 	}
 
 	_, err = manager.Database.Exec(`CREATE SCHEMA IF NOT EXISTS messaging`)
@@ -78,6 +74,7 @@ func NewCommonProtocol(protocol message_delivery.Interface) *CommonProtocol {
 	}
 
 	protocol.SetHandlerDeliverMessage(commonProtocol.deliverMessage)
+	protocol.SetHandlerDeliverMessageMultiTarget(commonProtocol.deliverMessageMultiTarget)
 
 	return commonProtocol
 }

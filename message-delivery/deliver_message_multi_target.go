@@ -8,7 +8,7 @@ import (
 	message_delivery "github.com/PretendoNetwork/nex-protocols-go/v2/message-delivery"
 )
 
-func (commonProtocol *CommonProtocol) deliverMessage(err error, packet nex.PacketInterface, callID uint32, oUserMessage types.DataHolder) (*nex.RMCMessage, *nex.Error) {
+func (commonProtocol *CommonProtocol) deliverMessageMultiTarget(err error, packet nex.PacketInterface, callID uint32, lstTarget types.List[types.PID], oUserMessage types.DataHolder) (*nex.RMCMessage, *nex.Error) {
 	if err != nil {
 		common_globals.Logger.Error(err.Error())
 		return nil, nex.NewError(nex.ResultCodes.Core.InvalidArgument, err.Error())
@@ -20,10 +20,10 @@ func (commonProtocol *CommonProtocol) deliverMessage(err error, packet nex.Packe
 	// NOTE - This method will silently fail on any errors
 	rmcResponse := nex.NewRMCSuccess(endpoint, nil)
 	rmcResponse.ProtocolID = message_delivery.ProtocolID
-	rmcResponse.MethodID = message_delivery.MethodDeliverMessage
+	rmcResponse.MethodID = message_delivery.MethodDeliverMessageMultiTarget
 	rmcResponse.CallID = callID
 
-	recipientID, recipientType, nexError := commonProtocol.manager.ValidateMessage(oUserMessage)
+	_, _, nexError := commonProtocol.manager.ValidateMessage(oUserMessage)
 	if nexError != nil {
 		common_globals.Logger.Error(nexError.Error())
 		return rmcResponse, nil
@@ -35,7 +35,12 @@ func (commonProtocol *CommonProtocol) deliverMessage(err error, packet nex.Packe
 		return rmcResponse, nil
 	}
 
-	_, _, _, nexError = commonProtocol.manager.ProcessMessage(commonProtocol.manager, oUserMessage, types.List[types.UInt64]{recipientID}, recipientType, true)
+	recipientIDs := make(types.List[types.UInt64], len(lstTarget))
+	for i, recipientID := range lstTarget {
+		recipientIDs[i] = types.UInt64(recipientID)
+	}
+
+	_, _, _, nexError = commonProtocol.manager.ProcessMessage(commonProtocol.manager, oUserMessage, recipientIDs, 1, true)
 	if nexError != nil {
 		common_globals.Logger.Error(nexError.Error())
 		return rmcResponse, nil
