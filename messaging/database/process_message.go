@@ -98,7 +98,23 @@ func ProcessMessage(manager *common_globals.MessagingManager, message types.Data
 
 		// * MessageDelivery will send the message if the user is connected, while Messaging will not
 		if sendMessage {
-			common_globals.SendMessage(manager.Endpoint, message, targetConnections)
+			libraryVersion := manager.Endpoint.LibraryVersions().Messaging
+
+			// * If sending to PIDs, prepare the message for each of them if multiple targets are set
+			if recipientType == 1 {
+				for _, targetConnection := range targetConnections {
+					targetHeader := common_globals.SetUserMessageRecipientData(libraryVersion, header, types.UInt64(targetConnection.PID()), recipientType)
+					targetMessage, nexError := manager.SetMessageHeader(message, targetHeader)
+					if nexError != nil {
+						return message, nil, nil, nexError
+					}
+
+					common_globals.SendMessage(manager.Endpoint, targetMessage, []*nex.PRUDPConnection{targetConnection})
+				}
+			} else {
+				common_globals.SendMessage(manager.Endpoint, message, targetConnections)
+			}
+
 		}
 	} else {
 		return message, nil, nil, nex.NewError(nex.ResultCodes.Core.NotImplemented, "Non-instant messages are not implemented")
