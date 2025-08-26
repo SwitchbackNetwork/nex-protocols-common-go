@@ -1,4 +1,4 @@
-package message_delivery
+package messaging
 
 import (
 	"github.com/PretendoNetwork/nex-go/v2"

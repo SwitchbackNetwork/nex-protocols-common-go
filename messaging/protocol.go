@@ -1,4 +1,4 @@
-package message_delivery
+package messaging
 
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
@@ -32,11 +32,11 @@ func (commonProtocol *CommonProtocol) SetManager(manager *common_globals.Messagi
 	_, err = manager.Database.Exec(`CREATE TABLE IF NOT EXISTS messaging.instant_messages (
 		id bigserial PRIMARY KEY,
 		recipient_id numeric(20),
-		recipient_type numeric(10),
+		recipient_type bigint,
 		parent_id bigint,
 		sender_pid numeric(20),
 		reception_time timestamp,
-		lifetime numeric(10),
+		lifetime bigint,
 		flags bigint,
 		subject text,
 		sender text,
@@ -68,11 +68,11 @@ func (commonProtocol *CommonProtocol) SetManager(manager *common_globals.Messagi
 	_, err = manager.Database.Exec(`CREATE TABLE IF NOT EXISTS messaging.messages (
 		id bigserial PRIMARY KEY,
 		recipient_id numeric(20),
-		recipient_type numeric(10),
+		recipient_type bigint,
 		parent_id bigint,
 		sender_pid numeric(20),
 		reception_time timestamp,
-		lifetime numeric(10),
+		lifetime bigint,
 		flags bigint,
 		subject text,
 		sender text,
@@ -112,6 +112,7 @@ func NewCommonProtocol(protocol messaging.Interface) *CommonProtocol {
 	}
 
 	protocol.SetHandlerDeliverMessage(commonProtocol.deliverMessage)
+	protocol.SetHandlerGetNumberOfMessages(commonProtocol.getNumberOfMessages)
 	protocol.SetHandlerDeliverMessageMultiTarget(commonProtocol.deliverMessageMultiTarget)
 
 	return commonProtocol

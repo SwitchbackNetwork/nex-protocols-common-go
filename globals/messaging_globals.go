@@ -11,14 +11,15 @@ import (
 
 // MessagingManager manages messaging communications
 type MessagingManager struct {
-	Database           *sql.DB
-	Endpoint           *nex.PRUDPEndPoint
+	Database                 *sql.DB
+	Endpoint                 *nex.PRUDPEndPoint
 
-	MatchmakingManager *MatchmakingManager
-	ValidateMessage    func(message types.DataHolder) (types.UInt64, types.UInt32, *nex.Error)
-	GetMessageHeader   func(message types.DataHolder) (messaging_types.UserMessage, *nex.Error)
-	SetMessageHeader   func(message types.DataHolder, header messaging_types.UserMessage) (types.DataHolder, *nex.Error)
-	ProcessMessage     func(manager *MessagingManager, message types.DataHolder, recipientIDs types.List[types.UInt64], recipientType types.UInt32, sendMessage bool) (types.DataHolder, types.List[types.UInt32], types.List[types.PID], *nex.Error)
+	MatchmakingManager       *MatchmakingManager
+	ValidateMessage          func(message types.DataHolder) (types.UInt64, types.UInt32, *nex.Error)
+	GetMessageHeader         func(message types.DataHolder) (messaging_types.UserMessage, *nex.Error)
+	SetMessageHeader         func(message types.DataHolder, header messaging_types.UserMessage) (types.DataHolder, *nex.Error)
+	ProcessMessage           func(manager *MessagingManager, message types.DataHolder, recipientIDs types.List[types.UInt64], recipientType types.UInt32, sendMessage bool) (types.DataHolder, types.List[types.UInt32], types.List[types.PID], *nex.Error)
+	ValidateMessageRecipient func(manager *MessagingManager, pid types.PID, recipientID types.UInt64, recipientType types.UInt32) bool
 }
 
 // ValidateUserMessage checks if a UserMessage is valid, and returns its validity and the recipient information of the message

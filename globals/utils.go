@@ -188,6 +188,23 @@ func SetUserMessageRecipientData(libraryVersion *nex.LibraryVersion, userMessage
 	return userMessage
 }
 
+// GetMessageRecipientData returns the recipient ID and the recipient type of a message recipient
+func GetMessageRecipientData(libraryVersion *nex.LibraryVersion, recipient messaging_types.MessageRecipient) (types.UInt64, types.UInt32) {
+	if libraryVersion.GreaterOrEqual("4.0.0") {
+		switch recipient.UIRecipientType {
+		case 1:
+			return types.UInt64(recipient.PrincipalID), recipient.UIRecipientType
+		case 2:
+			return types.UInt64(recipient.GatheringID), recipient.UIRecipientType
+		default:
+			Logger.Errorf("Invalid recipient type %d", recipient.UIRecipientType)
+			return 0, recipient.UIRecipientType // * Unknown
+		}
+	}
+
+	return types.UInt64(recipient.IDRecipient), recipient.UIRecipientType
+}
+
 // SendNotificationEvent sends a notification event to the specified targets
 func SendNotificationEvent(endpoint *nex.PRUDPEndPoint, event notifications_types.NotificationEvent, targets []uint64) {
 	server := endpoint.Server

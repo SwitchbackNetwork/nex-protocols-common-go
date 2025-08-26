@@ -99,7 +99,7 @@ func ProcessMessage(manager *common_globals.MessagingManager, message types.Data
 
 		// * MessageDelivery will send the message if the user is connected, while Messaging will not
 		if sendMessage {
-			libraryVersion := manager.Endpoint.LibraryVersions().Messaging
+			libraryVersion := manager.Endpoint.Server.LibraryVersions.Messaging
 
 			// * If sending to PIDs, prepare the message for each of them if multiple targets are set
 			if recipientType == 1 {
