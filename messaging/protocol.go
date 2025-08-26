@@ -114,6 +114,7 @@ func NewCommonProtocol(protocol messaging.Interface) *CommonProtocol {
 	protocol.SetHandlerDeliverMessage(commonProtocol.deliverMessage)
 	protocol.SetHandlerGetNumberOfMessages(commonProtocol.getNumberOfMessages)
 	protocol.SetHandlerGetMessagesHeaders(commonProtocol.getMessagesHeaders)
+	protocol.SetHandlerDeleteMessages(commonProtocol.deleteMessages)
 	protocol.SetHandlerDeliverMessageMultiTarget(commonProtocol.deliverMessageMultiTarget)
 
 	return commonProtocol
