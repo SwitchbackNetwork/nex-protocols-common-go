@@ -64,6 +64,44 @@ func (commonProtocol *CommonProtocol) SetManager(manager *common_globals.Messagi
 		common_globals.Logger.Error(err.Error())
 		return
 	}
+
+	_, err = manager.Database.Exec(`CREATE TABLE IF NOT EXISTS messaging.messages (
+		id bigserial PRIMARY KEY,
+		recipient_id numeric(20),
+		recipient_type numeric(10),
+		parent_id bigint,
+		sender_pid numeric(20),
+		reception_time timestamp,
+		lifetime numeric(10),
+		flags bigint,
+		subject text,
+		sender text,
+		type text NOT NULL DEFAULT '',
+		read boolean NOT NULL DEFAULT false,
+		deleted boolean NOT NULL DEFAULT false
+	)`)
+	if err != nil {
+		common_globals.Logger.Error(err.Error())
+		return
+	}
+
+	_, err = manager.Database.Exec(`CREATE TABLE IF NOT EXISTS messaging.text_messages (
+		id bigint PRIMARY KEY REFERENCES messaging.messages(id),
+		body text
+	)`)
+	if err != nil {
+		common_globals.Logger.Error(err.Error())
+		return
+	}
+
+	_, err = manager.Database.Exec(`CREATE TABLE IF NOT EXISTS messaging.binary_messages (
+		id bigint PRIMARY KEY REFERENCES messaging.messages(id),
+		body bytea
+	)`)
+	if err != nil {
+		common_globals.Logger.Error(err.Error())
+		return
+	}
 }
 
 // NewCommonProtocol returns a new CommonProtocol

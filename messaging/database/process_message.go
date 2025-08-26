@@ -23,8 +23,8 @@ func ProcessMessage(manager *common_globals.MessagingManager, message types.Data
 	case 1: // * PID
 		// TODO - Should we check that the PID exists with manager.Endpoint.AccountDetailsByPID?
 
-		// * We don't have to get the connection if this isn't an instant message or we won't send it
-		if header.UIFlags & 1 != 0 && sendMessage {
+		// * We don't have to get the connection if this isn't an instant message
+		if header.UIFlags & 1 != 0 {
 			for _, recipientID := range recipientIDs {
 				targetConnection := manager.Endpoint.FindConnectionByPID(uint64(recipientID))
 				if targetConnection != nil {
@@ -40,6 +40,7 @@ func ProcessMessage(manager *common_globals.MessagingManager, message types.Data
 			return message, nil, nil, nex.NewError(nex.ResultCodes.Core.NotImplemented, "Messages to gatherings are not implemented")
 		}
 
+		// * DeliverMessageMultiTarget seems to only support PIDs based on how the method gets handled internally on games
 		if len(recipientIDs) != 1 {
 			return message, nil, nil, nex.NewError(nex.ResultCodes.Core.InvalidArgument, "Messages to multiple gatherings are not supported")
 		}
@@ -117,7 +118,26 @@ func ProcessMessage(manager *common_globals.MessagingManager, message types.Data
 
 		}
 	} else {
-		return message, nil, nil, nex.NewError(nex.ResultCodes.Core.NotImplemented, "Non-instant messages are not implemented")
+		messageObjectID := message.Object.ObjectID()
+		if messageObjectID.Equals(types.NewString("TextMessage")) {
+			textMessage := message.Object.(messaging_types.TextMessage)
+			for _, recipientID := range recipientIDs {
+				nexError = InsertTextMessage(manager, textMessage, recipientID, recipientType)
+				if nexError != nil {
+					return message, nil, nil, nexError
+				}
+			}
+		} else if messageObjectID.Equals(types.NewString("BinaryMessage")) {
+			binaryMessage := message.Object.(messaging_types.BinaryMessage)
+			for _, recipientID := range recipientIDs {
+				nexError = InsertBinaryMessage(manager, binaryMessage, recipientID, recipientType)
+				if nexError != nil {
+					return message, nil, nil, nexError
+				}
+			}
+		} else {
+			return message, nil, nil, nex.NewError(nex.ResultCodes.Core.InvalidArgument, "Invalid data holder object ID")
+		}
 	}
 
 	return message, lstSandboxNodeID, lstParticipants, nil
