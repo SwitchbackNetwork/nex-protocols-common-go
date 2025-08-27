@@ -20,6 +20,7 @@ type MessagingManager struct {
 	SetMessageHeader         func(message types.DataHolder, header messaging_types.UserMessage) (types.DataHolder, *nex.Error)
 	ProcessMessage           func(manager *MessagingManager, message types.DataHolder, recipientIDs types.List[types.UInt64], recipientType types.UInt32, sendMessage bool) (types.DataHolder, types.List[types.UInt32], types.List[types.PID], *nex.Error)
 	ValidateMessageRecipient func(manager *MessagingManager, pid types.PID, recipientID types.UInt64, recipientType types.UInt32) bool
+	RetrieveDetailedMessage  func(manager *MessagingManager, messageHeader messaging_types.UserMessage, messageType string) (types.DataHolder, *nex.Error)
 }
 
 // ValidateUserMessage checks if a UserMessage is valid, and returns its validity and the recipient information of the message

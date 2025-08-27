@@ -23,6 +23,14 @@ func (commonProtocol *CommonProtocol) SetManager(manager *common_globals.Messagi
 		manager.ProcessMessage = messaging_database.ProcessMessage
 	}
 
+	if manager.ValidateMessageRecipient == nil {
+		manager.ValidateMessageRecipient = messaging_database.ValidateMessageRecipient
+	}
+
+	if manager.RetrieveDetailedMessage == nil {
+		manager.RetrieveDetailedMessage = messaging_database.RetrieveDetailedMessage
+	}
+
 	_, err = manager.Database.Exec(`CREATE SCHEMA IF NOT EXISTS messaging`)
 	if err != nil {
 		common_globals.Logger.Error(err.Error())
@@ -114,6 +122,8 @@ func NewCommonProtocol(protocol messaging.Interface) *CommonProtocol {
 	protocol.SetHandlerDeliverMessage(commonProtocol.deliverMessage)
 	protocol.SetHandlerGetNumberOfMessages(commonProtocol.getNumberOfMessages)
 	protocol.SetHandlerGetMessagesHeaders(commonProtocol.getMessagesHeaders)
+	protocol.SetHandlerRetrieveAllMessagesWithinRange(commonProtocol.retrieveAllMessagesWithinRange)
+	protocol.SetHandlerRetrieveMessages(commonProtocol.retrieveMessages)
 	protocol.SetHandlerDeleteMessages(commonProtocol.deleteMessages)
 	protocol.SetHandlerDeleteAllMessages(commonProtocol.deleteAllMessages)
 	protocol.SetHandlerDeliverMessageMultiTarget(commonProtocol.deliverMessageMultiTarget)

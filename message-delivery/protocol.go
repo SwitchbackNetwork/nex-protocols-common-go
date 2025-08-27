@@ -27,6 +27,10 @@ func (commonProtocol *CommonProtocol) SetManager(manager *common_globals.Messagi
 		manager.ValidateMessageRecipient = messaging_database.ValidateMessageRecipient
 	}
 
+	if manager.RetrieveDetailedMessage == nil {
+		manager.RetrieveDetailedMessage = messaging_database.RetrieveDetailedMessage
+	}
+
 	_, err = manager.Database.Exec(`CREATE SCHEMA IF NOT EXISTS messaging`)
 	if err != nil {
 		common_globals.Logger.Error(err.Error())
