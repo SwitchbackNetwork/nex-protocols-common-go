@@ -23,6 +23,12 @@ func (commonProtocol *CommonProtocol) deliverMessageMultiTarget(err error, packe
 	rmcResponse.MethodID = message_delivery.MethodDeliverMessageMultiTarget
 	rmcResponse.CallID = callID
 
+	// * Only allow up to 100 targets, based on the maximum amount of friends allowed
+	if len(lstTarget) > 100 {
+		common_globals.Logger.Error("Message has over 100 targets")
+		return rmcResponse, nil
+	}
+
 	_, _, nexError := commonProtocol.manager.ValidateMessage(oUserMessage)
 	if nexError != nil {
 		common_globals.Logger.Error(nexError.Error())

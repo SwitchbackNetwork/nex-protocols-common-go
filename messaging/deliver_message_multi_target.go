@@ -17,6 +17,12 @@ func (commonProtocol *CommonProtocol) deliverMessageMultiTarget(err error, packe
 	connection := packet.Sender().(*nex.PRUDPConnection)
 	endpoint := connection.Endpoint().(*nex.PRUDPEndPoint)
 
+	// * Only allow up to 100 targets, based on the maximum amount of friends allowed
+	if len(lstTarget) > 100 {
+		common_globals.Logger.Error("Message has over 100 targets")
+		return nil, nex.NewError(nex.ResultCodes.Core.InvalidArgument, "Message has over 100 targets")
+	}
+
 	_, _, nexError := commonProtocol.manager.ValidateMessage(oUserMessage)
 	if nexError != nil {
 		common_globals.Logger.Error(nexError.Error())
