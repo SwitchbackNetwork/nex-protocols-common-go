@@ -62,7 +62,7 @@ func (commonProtocol *CommonProtocol) completePostObject(err error, packet nex.P
 		return nil, errCode
 	}
 
-	if ownerPID != uint32(connection.PID()) {
+	if ownerPID != connection.PID() {
 		return nil, nex.NewError(nex.ResultCodes.DataStore.PermissionDenied, "change_error")
 	}
 
