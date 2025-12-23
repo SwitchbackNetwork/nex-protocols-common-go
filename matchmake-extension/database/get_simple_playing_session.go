@@ -5,8 +5,8 @@ import (
 
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
-	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	match_making_types "github.com/PretendoNetwork/nex-protocols-go/v2/match-making/types"
+	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 // GetSimplePlayingSession returns the simple playing sessions of the given PIDs
@@ -25,9 +25,9 @@ func GetSimplePlayingSession(manager *common_globals.MatchmakingManager, listPID
 		g.registered=true AND
 		g.type='MatchmakeSession' AND
 		$1=ANY(g.participants)`, pid).Scan(
-		&simplePlayingSession.GatheringID,
-		&simplePlayingSession.Attribute0,
-		&simplePlayingSession.GameMode)
+			&simplePlayingSession.GatheringID,
+			&simplePlayingSession.Attribute0,
+			&simplePlayingSession.GameMode)
 		if err != nil {
 			if err != sql.ErrNoRows {
 				common_globals.Logger.Critical(err.Error())

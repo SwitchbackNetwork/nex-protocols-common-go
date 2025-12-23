@@ -2,9 +2,9 @@ package database
 
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
-	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	match_making_types "github.com/PretendoNetwork/nex-protocols-go/v2/match-making/types"
 	pqextended "github.com/PretendoNetwork/pq-extended"
+	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 // GetSimpleCommunities returns a slice of SimpleCommunity using information from the given gathering IDs

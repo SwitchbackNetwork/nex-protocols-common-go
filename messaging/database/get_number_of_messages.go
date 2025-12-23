@@ -4,7 +4,7 @@ import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
 
-	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
+	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 // GetNumberOfMessages gets the number of messages available for the given recipient

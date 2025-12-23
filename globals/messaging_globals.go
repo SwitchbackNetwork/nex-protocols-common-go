@@ -11,8 +11,8 @@ import (
 
 // MessagingManager manages messaging communications
 type MessagingManager struct {
-	Database                 *sql.DB
-	Endpoint                 *nex.PRUDPEndPoint
+	Database *sql.DB
+	Endpoint *nex.PRUDPEndPoint
 
 	MatchmakingManager       *MatchmakingManager
 	ValidateMessage          func(message types.DataHolder) (types.UInt64, types.UInt32, *nex.Error)

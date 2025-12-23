@@ -5,8 +5,8 @@ import (
 
 	"github.com/PretendoNetwork/nex-go/v2/types"
 
-	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
-	match_making_database "github.com/PretendoNetwork/nex-protocols-common-go/v2/match-making/database"
+	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
+	match_making_database "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/match-making/database"
 )
 
 // ValidateMessageRecipient checks that the given PID can access the given recipient data

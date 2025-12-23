@@ -6,13 +6,13 @@ import (
 
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
-	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
-	"github.com/PretendoNetwork/nex-protocols-common-go/v2/match-making/tracking"
 	match_making "github.com/PretendoNetwork/nex-protocols-go/v2/match-making"
 	"github.com/PretendoNetwork/nex-protocols-go/v2/match-making/constants"
 	notifications "github.com/PretendoNetwork/nex-protocols-go/v2/notifications"
 	notifications_types "github.com/PretendoNetwork/nex-protocols-go/v2/notifications/types"
 	pqextended "github.com/PretendoNetwork/pq-extended"
+	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
+	"github.com/SwitchbackNetwork/nex-protocols-common-go/v2/match-making/tracking"
 )
 
 // JoinGatheringWithParticipants joins participants into a gathering. Returns the new number of participants

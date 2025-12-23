@@ -4,8 +4,8 @@ import (
 	"database/sql"
 
 	"github.com/PretendoNetwork/nex-go/v2"
-	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	pqextended "github.com/PretendoNetwork/pq-extended"
+	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 // RemoveParticipantFromGathering removes a participant from a gathering. Returns the new list of participants

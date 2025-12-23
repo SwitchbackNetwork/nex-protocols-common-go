@@ -3,10 +3,10 @@ package database
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
-	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
-	match_making_database "github.com/PretendoNetwork/nex-protocols-common-go/v2/match-making/database"
 	match_making_types "github.com/PretendoNetwork/nex-protocols-go/v2/match-making/types"
 	pqextended "github.com/PretendoNetwork/pq-extended"
+	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
+	match_making_database "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/match-making/database"
 )
 
 // CreatePersistentGathering creates a new PersistentGathering on the database. No participants are added
