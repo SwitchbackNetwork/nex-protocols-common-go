@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/PretendoNetwork/nex-go/v2"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	datastore "github.com/PretendoNetwork/nex-protocols-go/v2/datastore"
 	datastore_types "github.com/PretendoNetwork/nex-protocols-go/v2/datastore/types"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 func (commonProtocol *CommonProtocol) completePostObject(err error, packet nex.PacketInterface, callID uint32, param datastore_types.DataStoreCompletePostParam) (*nex.RMCMessage, *nex.Error) {
@@ -62,7 +62,7 @@ func (commonProtocol *CommonProtocol) completePostObject(err error, packet nex.P
 		return nil, errCode
 	}
 
-	if ownerPID != connection.PID() {
+	if ownerPID != uint32(connection.PID()) {
 		return nil, nex.NewError(nex.ResultCodes.DataStore.PermissionDenied, "change_error")
 	}
 

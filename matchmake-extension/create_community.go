@@ -3,11 +3,11 @@ package matchmake_extension
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
+	match_making_database "github.com/PretendoNetwork/nex-protocols-common-go/v2/match-making/database"
+	"github.com/PretendoNetwork/nex-protocols-common-go/v2/matchmake-extension/database"
 	match_making_types "github.com/PretendoNetwork/nex-protocols-go/v2/match-making/types"
 	matchmake_extension "github.com/PretendoNetwork/nex-protocols-go/v2/matchmake-extension"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
-	match_making_database "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/match-making/database"
-	"github.com/SwitchbackNetwork/nex-protocols-common-go/v2/matchmake-extension/database"
 )
 
 func (commonProtocol *CommonProtocol) createCommunity(err error, packet nex.PacketInterface, callID uint32, community match_making_types.PersistentGathering, strMessage types.String) (*nex.RMCMessage, *nex.Error) {

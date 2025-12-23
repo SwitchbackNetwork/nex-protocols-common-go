@@ -3,9 +3,9 @@ package database
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	notifications_types "github.com/PretendoNetwork/nex-protocols-go/v2/notifications/types"
 	pqextended "github.com/PretendoNetwork/pq-extended"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 // GetNotificationDatas gets the notification datas that belong to friends of the user and match with any of the given types

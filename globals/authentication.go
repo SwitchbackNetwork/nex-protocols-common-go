@@ -64,7 +64,7 @@ func ValidatePretendoLoginData(pid types.PID, loginData types.DataHolder, aesKey
 	}
 
 	// Expire time is in milliseconds
-	expireTime := time.Unix(int64(decryptedToken.ExpireTime/1000), 0)
+	expireTime := time.Unix(int64(decryptedToken.ExpireTime / 1000), 0)
 
 	if expireTime.Before(time.Now()) {
 		return nex.NewError(nex.ResultCodes.Authentication.TokenExpired, "Token expired")
@@ -106,7 +106,7 @@ func DecryptToken(encryptedToken []byte, aesKey []byte) (*NEXToken, *nex.Error) 
 	expectedChecksum := binary.BigEndian.Uint32(encryptedToken[0:4])
 	encryptedBody := encryptedToken[4:]
 
-	if len(encryptedBody)%aes.BlockSize != 0 {
+	if len(encryptedBody) % aes.BlockSize != 0 {
 		return nil, nex.NewError(nex.ResultCodes.Authentication.ValidationFailed, fmt.Sprintf("Encrypted body has invalid size %d", len(encryptedBody)))
 	}
 

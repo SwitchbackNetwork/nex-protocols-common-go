@@ -3,8 +3,8 @@ package nattraversal
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	nat_traversal "github.com/PretendoNetwork/nex-protocols-go/v2/nat-traversal"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 func (commonProtocol *CommonProtocol) reportNATTraversalResultDetail(err error, packet nex.PacketInterface, callID uint32, cid types.UInt32, result types.Bool, detail types.Int32, rtt types.UInt32) (*nex.RMCMessage, *nex.Error) {

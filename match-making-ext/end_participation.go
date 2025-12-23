@@ -3,9 +3,9 @@ package match_making_ext
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
+	"github.com/PretendoNetwork/nex-protocols-common-go/v2/match-making/database"
 	match_making_ext "github.com/PretendoNetwork/nex-protocols-go/v2/match-making-ext"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
-	"github.com/SwitchbackNetwork/nex-protocols-common-go/v2/match-making/database"
 )
 
 func (commonProtocol *CommonProtocol) endParticipation(err error, packet nex.PacketInterface, callID uint32, idGathering types.UInt32, strMessage types.String) (*nex.RMCMessage, *nex.Error) {

@@ -5,8 +5,8 @@ import (
 
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	ticket_granting "github.com/PretendoNetwork/nex-protocols-go/v2/ticket-granting"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 func (commonProtocol *CommonProtocol) loginEx(err error, packet nex.PacketInterface, callID uint32, strUserName types.String, oExtraData types.DataHolder) (*nex.RMCMessage, *nex.Error) {

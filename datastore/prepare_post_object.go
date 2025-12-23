@@ -6,9 +6,9 @@ import (
 
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	datastore "github.com/PretendoNetwork/nex-protocols-go/v2/datastore"
 	datastore_types "github.com/PretendoNetwork/nex-protocols-go/v2/datastore/types"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 func (commonProtocol *CommonProtocol) preparePostObject(err error, packet nex.PacketInterface, callID uint32, param datastore_types.DataStorePreparePostParam) (*nex.RMCMessage, *nex.Error) {
@@ -43,7 +43,7 @@ func (commonProtocol *CommonProtocol) preparePostObject(err error, packet nex.Pa
 	}
 
 	// TODO - Should this be moved to InitializeObjectByPreparePostParam?
-	for _, ratingInitParamWithSlot := range param.RatingInitParams {
+	for _ , ratingInitParamWithSlot := range param.RatingInitParams {
 		errCode = commonProtocol.InitializeObjectRatingWithSlot(dataID, ratingInitParamWithSlot)
 		if errCode != nil {
 			common_globals.Logger.Errorf("Error on rating init: %s", errCode.Error())

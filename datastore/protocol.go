@@ -38,7 +38,7 @@ type CommonProtocol struct {
 	DeleteObjectByDataIDWithPassword             func(dataID types.UInt64, password types.UInt64) *nex.Error
 	DeleteObjectByDataID                         func(dataID types.UInt64) *nex.Error
 	GetObjectInfosByDataStoreSearchParam         func(param datastore_types.DataStoreSearchParam, pid types.PID) ([]datastore_types.DataStoreMetaInfo, uint32, *nex.Error)
-	GetObjectOwnerByDataID                       func(dataID types.UInt64) (types.PID, *nex.Error)
+	GetObjectOwnerByDataID                       func(dataID types.UInt64) (uint32, *nex.Error)
 	OnAfterDeleteObject                          func(packet nex.PacketInterface, param datastore_types.DataStoreDeleteParam)
 	OnAfterGetMeta                               func(packet nex.PacketInterface, param datastore_types.DataStoreGetMetaParam)
 	OnAfterGetMetas                              func(packet nex.PacketInterface, dataIDs types.List[types.UInt64], param datastore_types.DataStoreGetMetaParam)

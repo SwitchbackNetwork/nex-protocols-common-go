@@ -3,9 +3,9 @@ package matchmake_extension
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
+	"github.com/PretendoNetwork/nex-protocols-common-go/v2/matchmake-extension/database"
 	matchmake_extension "github.com/PretendoNetwork/nex-protocols-go/v2/matchmake-extension"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
-	"github.com/SwitchbackNetwork/nex-protocols-common-go/v2/matchmake-extension/database"
 )
 
 func (commonProtocol *CommonProtocol) openParticipation(err error, packet nex.PacketInterface, callID uint32, gid types.UInt32) (*nex.RMCMessage, *nex.Error) {
@@ -16,6 +16,7 @@ func (commonProtocol *CommonProtocol) openParticipation(err error, packet nex.Pa
 
 	connection := packet.Sender().(*nex.PRUDPConnection)
 	endpoint := connection.Endpoint().(*nex.PRUDPEndPoint)
+
 
 	commonProtocol.manager.Mutex.Lock()
 

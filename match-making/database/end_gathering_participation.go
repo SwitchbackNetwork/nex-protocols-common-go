@@ -5,11 +5,11 @@ import (
 
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
+	"github.com/PretendoNetwork/nex-protocols-common-go/v2/match-making/tracking"
 	match_making "github.com/PretendoNetwork/nex-protocols-go/v2/match-making"
 	notifications "github.com/PretendoNetwork/nex-protocols-go/v2/notifications"
 	notifications_types "github.com/PretendoNetwork/nex-protocols-go/v2/notifications/types"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
-	"github.com/SwitchbackNetwork/nex-protocols-common-go/v2/match-making/tracking"
 )
 
 // EndGatheringParticipation ends the participation of a connection within a gathering and performs any additional handling required

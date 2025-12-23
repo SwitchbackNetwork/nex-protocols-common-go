@@ -3,14 +3,14 @@ package messaging
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	messaging "github.com/PretendoNetwork/nex-protocols-go/v2/messaging"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
-	messaging_database "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/messaging/database"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
+	messaging_database "github.com/PretendoNetwork/nex-protocols-common-go/v2/messaging/database"
 )
 
 type CommonProtocol struct {
-	endpoint nex.EndpointInterface
-	protocol messaging.Interface
-	manager  *common_globals.MessagingManager
+	endpoint              nex.EndpointInterface
+	protocol              messaging.Interface
+	manager               *common_globals.MessagingManager
 }
 
 // SetManager defines the messaging manager to be used by the common protocol

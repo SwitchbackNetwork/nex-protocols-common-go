@@ -7,8 +7,8 @@ import (
 	messaging "github.com/PretendoNetwork/nex-protocols-go/v2/messaging"
 	messaging_types "github.com/PretendoNetwork/nex-protocols-go/v2/messaging/types"
 
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
-	messaging_database "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/messaging/database"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
+	messaging_database "github.com/PretendoNetwork/nex-protocols-common-go/v2/messaging/database"
 )
 
 func (commonProtocol *CommonProtocol) getMessagesHeaders(err error, packet nex.PacketInterface, callID uint32, recipient messaging_types.MessageRecipient, resultRange types.ResultRange) (*nex.RMCMessage, *nex.Error) {

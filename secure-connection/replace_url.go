@@ -5,7 +5,7 @@ import (
 	"github.com/PretendoNetwork/nex-go/v2/types"
 	secure_connection "github.com/PretendoNetwork/nex-protocols-go/v2/secure-connection"
 
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 )
 
 func (commonProtocol *CommonProtocol) replaceURL(err error, packet nex.PacketInterface, callID uint32, target types.StationURL, url types.StationURL) (*nex.RMCMessage, *nex.Error) {
@@ -17,7 +17,7 @@ func (commonProtocol *CommonProtocol) replaceURL(err error, packet nex.PacketInt
 	connection := packet.Sender().(*nex.PRUDPConnection)
 	endpoint := connection.Endpoint()
 
-	for i, station := range connection.StationURLs {
+	for i, station := range connection.StationURLs  {
 		currentStationAddress, currentStationAddressOk := station.Address()
 		currentStationPort, currentStationPortOk := station.PortNumber()
 		oldStationAddress, oldStationAddressOk := target.Address()

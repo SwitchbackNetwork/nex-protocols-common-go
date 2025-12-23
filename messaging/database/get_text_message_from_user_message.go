@@ -4,7 +4,7 @@ import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	messaging_types "github.com/PretendoNetwork/nex-protocols-go/v2/messaging/types"
 
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 )
 
 // GetTextMessageFromUserMessage gets the text body for a given user message

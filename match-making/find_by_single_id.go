@@ -3,9 +3,9 @@ package matchmaking
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	match_making "github.com/PretendoNetwork/nex-protocols-go/v2/match-making"
 	match_making_types "github.com/PretendoNetwork/nex-protocols-go/v2/match-making/types"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 func (commonProtocol *CommonProtocol) findBySingleID(err error, packet nex.PacketInterface, callID uint32, id types.UInt32) (*nex.RMCMessage, *nex.Error) {

@@ -2,9 +2,9 @@ package datastore
 
 import (
 	"github.com/PretendoNetwork/nex-go/v2"
+	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 	datastore "github.com/PretendoNetwork/nex-protocols-go/v2/datastore"
 	datastore_types "github.com/PretendoNetwork/nex-protocols-go/v2/datastore/types"
-	common_globals "github.com/SwitchbackNetwork/nex-protocols-common-go/v2/globals"
 )
 
 func (commonProtocol *CommonProtocol) changeMeta(err error, packet nex.PacketInterface, callID uint32, param datastore_types.DataStoreChangeMetaParam) (*nex.RMCMessage, *nex.Error) {
@@ -47,21 +47,21 @@ func (commonProtocol *CommonProtocol) changeMeta(err error, packet nex.PacketInt
 		return nil, errCode
 	}
 
-	if uint32(param.ModifiesFlag)&0x08 != 0 {
+	if uint32(param.ModifiesFlag) & 0x08 != 0 {
 		errCode = commonProtocol.UpdateObjectPeriodByDataIDWithPassword(param.DataID, param.Period, param.UpdatePassword)
 		if errCode != nil {
 			return nil, errCode
 		}
 	}
 
-	if uint32(param.ModifiesFlag)&0x10 != 0 {
+	if uint32(param.ModifiesFlag) & 0x10 != 0 {
 		errCode = commonProtocol.UpdateObjectMetaBinaryByDataIDWithPassword(param.DataID, param.MetaBinary, param.UpdatePassword)
 		if errCode != nil {
 			return nil, errCode
 		}
 	}
 
-	if uint32(param.ModifiesFlag)&0x80 != 0 {
+	if uint32(param.ModifiesFlag) & 0x80 != 0 {
 		errCode = commonProtocol.UpdateObjectDataTypeByDataIDWithPassword(param.DataID, param.DataType, param.UpdatePassword)
 		if errCode != nil {
 			return nil, errCode
