@@ -10,8 +10,8 @@ import (
 )
 
 func (commonProtocol *CommonProtocol) completePostObject(err error, packet nex.PacketInterface, callID uint32, param datastore_types.DataStoreCompletePostParam) (*nex.RMCMessage, *nex.Error) {
-	if commonProtocol.minIOClient == nil {
-		common_globals.Logger.Warning("MinIOClient not defined")
+	if commonProtocol.s3Client == nil {
+		common_globals.Logger.Warning("s3Client not defined")
 		return nil, nex.NewError(nex.ResultCodes.Core.NotImplemented, "change_error")
 	}
 

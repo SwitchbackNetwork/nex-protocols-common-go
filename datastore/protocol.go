@@ -9,7 +9,8 @@ import (
 	"github.com/PretendoNetwork/nex-go/v2/types"
 	datastore "github.com/PretendoNetwork/nex-protocols-go/v2/datastore"
 	datastore_types "github.com/PretendoNetwork/nex-protocols-go/v2/datastore/types"
-	"github.com/minio/minio-go/v7"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 type CommonProtocol struct {
@@ -19,7 +20,7 @@ type CommonProtocol struct {
 	s3DataKeyBase                                string
 	s3NotifyKeyBase                              string
 	RootCACert                                   []byte
-	minIOClient                                  *minio.Client
+	s3Client                                     *s3.Client
 	S3Presigner                                  S3PresignerInterface
 	GetUserFriendPIDs                            func(pid uint32) []uint32
 	GetObjectInfoByDataID                        func(dataID types.UInt64) (datastore_types.DataStoreMetaInfo, *nex.Error)
@@ -54,8 +55,16 @@ type CommonProtocol struct {
 	OnAfterRateObjects                           func(packet nex.PacketInterface, targets types.List[datastore_types.DataStoreRatingTarget], params types.List[datastore_types.DataStoreRateObjectParam], transactional types.Bool, fetchRatings types.Bool)
 }
 
-func (c *CommonProtocol) S3StatObject(bucket, key string) (minio.ObjectInfo, error) {
-	return c.minIOClient.StatObject(context.TODO(), bucket, key, minio.StatObjectOptions{})
+func (c *CommonProtocol) S3StatObject(bucket, key string) (s3.HeadObjectOutput, error) {
+	info, err := c.s3Client.HeadObject(context.TODO(), &s3.HeadObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return s3.HeadObjectOutput{}, err
+	}
+
+	return *info, nil
 }
 
 func (c *CommonProtocol) S3ObjectSize(bucket, key string) (uint64, error) {
@@ -64,7 +73,7 @@ func (c *CommonProtocol) S3ObjectSize(bucket, key string) (uint64, error) {
 		return 0, err
 	}
 
-	return uint64(info.Size), nil
+	return uint64(*info.ContentLength), nil
 }
 
 func (c *CommonProtocol) VerifyObjectPermission(ownerPID, accessorPID types.PID, permission datastore_types.DataStorePermission) *nex.Error {
@@ -125,10 +134,10 @@ func (c *CommonProtocol) SetNotifyKeyBase(base string) {
 	c.s3NotifyKeyBase = base
 }
 
-// SetMinIOClient sets the MinIO S3 client
-func (c *CommonProtocol) SetMinIOClient(client *minio.Client) {
-	c.minIOClient = client
-	c.S3Presigner = NewS3Presigner(c.minIOClient)
+// SetS3Client sets the AWS S3 client
+func (c *CommonProtocol) SetS3Client(client *s3.Client) {
+	c.s3Client = client
+	c.S3Presigner = NewS3Presigner(c.s3Client)
 }
 
 // NewCommonProtocol returns a new CommonProtocol

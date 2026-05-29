@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/minio/minio-go/v7"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 type S3PresignerInterface interface {
@@ -14,38 +14,46 @@ type S3PresignerInterface interface {
 }
 
 type S3Presigner struct {
-	minio *minio.Client
+	s3 *s3.Client
 }
 
 func (p *S3Presigner) GetObject(bucket, key string, lifetime time.Duration) (*url.URL, error) {
-	reqParams := make(url.Values)
 
-	return p.minio.PresignedGetObject(context.Background(), bucket, key, lifetime, reqParams)
+	presigner := s3.NewPresignClient(p.s3)
+
+	presignedReq, err := presigner.PresignGetObject(context.Background(), &s3.GetObjectInput{Bucket: &bucket, Key: &key}, func(po *s3.PresignOptions) { po.Expires = lifetime })
+
+	if err != nil {
+		return nil, err
+	}
+
+	presignedURL, err := url.Parse(presignedReq.URL)
+	if err != nil {
+		return nil, err
+	}
+	return presignedURL, nil
 }
 
 func (p *S3Presigner) PostObject(bucket, key string, lifetime time.Duration) (*url.URL, map[string]string, error) {
-	policy := minio.NewPostPolicy()
+	presignClient := s3.NewPresignClient(p.s3)
 
-	err := policy.SetBucket(bucket)
+	presignedReq, err := presignClient.PresignPostObject(context.Background(), &s3.PutObjectInput{Bucket: &bucket, Key: &key}, func(ppo *s3.PresignPostOptions) { ppo.Expires = lifetime })
+
 	if err != nil {
 		return nil, nil, err
 	}
 
-	err = policy.SetKey(key)
+	presignedURL, err := url.Parse(presignedReq.URL)
+
 	if err != nil {
 		return nil, nil, err
 	}
 
-	err = policy.SetExpires(time.Now().UTC().Add(lifetime).UTC())
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return p.minio.PresignedPostPolicy(context.Background(), policy)
+	return presignedURL, presignedReq.Values, nil
 }
 
-func NewS3Presigner(minioClient *minio.Client) *S3Presigner {
+func NewS3Presigner(s3Client *s3.Client) *S3Presigner {
 	return &S3Presigner{
-		minio: minioClient,
+		s3: s3Client,
 	}
 }
