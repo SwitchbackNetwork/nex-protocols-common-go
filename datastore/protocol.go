@@ -16,6 +16,7 @@ import (
 type CommonProtocol struct {
 	endpoint                                     nex.EndpointInterface
 	protocol                                     datastore.Interface
+	UsePutInsteadOfPost                          bool // * Workaround for S3 providers that don't support Presigned POST. Requires client patches to properly turn the request into a PUT.
 	S3Bucket                                     string
 	s3DataKeyBase                                string
 	s3NotifyKeyBase                              string

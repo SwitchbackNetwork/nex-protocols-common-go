@@ -2,6 +2,7 @@ package datastore
 
 import (
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/PretendoNetwork/nex-go/v2"
@@ -43,7 +44,7 @@ func (commonProtocol *CommonProtocol) preparePostObject(err error, packet nex.Pa
 	}
 
 	// TODO - Should this be moved to InitializeObjectByPreparePostParam?
-	for _ , ratingInitParamWithSlot := range param.RatingInitParams {
+	for _, ratingInitParamWithSlot := range param.RatingInitParams {
 		errCode = commonProtocol.InitializeObjectRatingWithSlot(dataID, ratingInitParamWithSlot)
 		if errCode != nil {
 			common_globals.Logger.Errorf("Error on rating init: %s", errCode.Error())
@@ -57,8 +58,16 @@ func (commonProtocol *CommonProtocol) preparePostObject(err error, packet nex.Pa
 
 	bucket := commonProtocol.S3Bucket
 	key := fmt.Sprintf("%s/%d.bin", commonProtocol.s3DataKeyBase, dataID)
+	var URL *url.URL
+	var formData map[string]string
 
-	URL, formData, err := commonProtocol.S3Presigner.PostObject(bucket, key, time.Minute*15)
+	if commonProtocol.UsePutInsteadOfPost {
+		URL, err = commonProtocol.S3Presigner.PutObject(bucket, key, time.Minute*15)
+		formData = map[string]string{}
+	} else {
+		URL, formData, err = commonProtocol.S3Presigner.PostObject(bucket, key, time.Minute*15)
+	}
+
 	if err != nil {
 		common_globals.Logger.Error(err.Error())
 		return nil, nex.NewError(nex.ResultCodes.DataStore.OperationNotAllowed, "change_error")
