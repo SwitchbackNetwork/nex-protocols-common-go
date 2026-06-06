@@ -4,6 +4,7 @@ import (
 	"context"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/PretendoNetwork/nex-go/v2"
 	"github.com/PretendoNetwork/nex-go/v2/types"
@@ -16,13 +17,15 @@ import (
 type CommonProtocol struct {
 	endpoint                                     nex.EndpointInterface
 	protocol                                     datastore.Interface
-	UsePutInsteadOfPost                          bool // * Workaround for S3 providers that don't support Presigned POST. Requires client patches to properly turn the request into a PUT.
+	UseProxyForPOSTObject                        bool // * Use a proxy when handling POST Object requests, useful for S3 providers that do not support presigned POST URLs
+	ProxyBaseURL                                 string
 	S3Bucket                                     string
 	s3DataKeyBase                                string
 	s3NotifyKeyBase                              string
 	RootCACert                                   []byte
 	s3Client                                     *s3.Client
 	S3Presigner                                  S3PresignerInterface
+	DeriveProxyAuthToken                         func(key string, bucket string, exp *time.Time, maxFileSize int64) string
 	GetUserFriendPIDs                            func(pid uint32) []uint32
 	GetObjectInfoByDataID                        func(dataID types.UInt64) (datastore_types.DataStoreMetaInfo, *nex.Error)
 	UpdateObjectPeriodByDataIDWithPassword       func(dataID types.UInt64, dataType types.UInt16, password types.UInt64) *nex.Error

@@ -60,17 +60,35 @@ func (commonProtocol *CommonProtocol) preparePostObject(err error, packet nex.Pa
 	key := fmt.Sprintf("%s/%d.bin", commonProtocol.s3DataKeyBase, dataID)
 	var URL *url.URL
 	var formData map[string]string
+	expiresAt := time.Now().Add(time.Minute * 15)
 
-	if commonProtocol.UsePutInsteadOfPost {
-		URL, err = commonProtocol.S3Presigner.PutObject(bucket, key, time.Minute*15)
-		formData = map[string]string{}
+	if commonProtocol.UseProxyForPOSTObject {
+		if commonProtocol.ProxyBaseURL == "" {
+			common_globals.Logger.Error("ProxyBaseURL not defined")
+			return nil, nex.NewError(nex.ResultCodes.Core.NotImplemented, "change_error")
+		}
+
+		if commonProtocol.DeriveProxyAuthToken == nil {
+			common_globals.Logger.Error("DeriveProxyAuthToken not defined")
+			return nil, nex.NewError(nex.ResultCodes.Core.NotImplemented, "change_error")
+		}
+
+		proxyURL, parseErr := url.Parse(fmt.Sprintf("%s/%s", commonProtocol.ProxyBaseURL, bucket))
+		if parseErr != nil {
+			common_globals.Logger.Error(parseErr.Error())
+			return nil, nex.NewError(nex.ResultCodes.DataStore.OperationNotAllowed, "change_error")
+		}
+
+		URL = proxyURL
+		formData = map[string]string{
+			"token": commonProtocol.DeriveProxyAuthToken(key, bucket, &expiresAt, int64(param.Size)),
+		}
 	} else {
 		URL, formData, err = commonProtocol.S3Presigner.PostObject(bucket, key, time.Minute*15)
-	}
-
-	if err != nil {
-		common_globals.Logger.Error(err.Error())
-		return nil, nex.NewError(nex.ResultCodes.DataStore.OperationNotAllowed, "change_error")
+		if err != nil {
+			common_globals.Logger.Error(err.Error())
+			return nil, nex.NewError(nex.ResultCodes.DataStore.OperationNotAllowed, "change_error")
+		}
 	}
 
 	requestHeaders, errCode := commonProtocol.S3PostRequestHeaders()
