@@ -20,6 +20,7 @@ type CommonProtocol struct {
 	UseProxyForPOSTObject                        bool // * Use a proxy when handling POST Object requests, useful for S3 providers that do not support presigned POST URLs
 	ProxyBaseURL                                 string
 	S3Bucket                                     string
+	MaxObjectSize                                int64 // * In Bytes
 	s3DataKeyBase                                string
 	s3NotifyKeyBase                              string
 	RootCACert                                   []byte

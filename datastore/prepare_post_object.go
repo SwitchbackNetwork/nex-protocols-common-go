@@ -73,6 +73,11 @@ func (commonProtocol *CommonProtocol) preparePostObject(err error, packet nex.Pa
 			return nil, nex.NewError(nex.ResultCodes.Core.NotImplemented, "change_error")
 		}
 
+		maxObjectSize := commonProtocol.MaxObjectSize
+		if maxObjectSize <= 0 {
+			maxObjectSize = int64(param.Size)
+		}
+
 		proxyURL, parseErr := url.Parse(fmt.Sprintf("%s/%s", commonProtocol.ProxyBaseURL, bucket))
 		if parseErr != nil {
 			common_globals.Logger.Error(parseErr.Error())
@@ -81,7 +86,7 @@ func (commonProtocol *CommonProtocol) preparePostObject(err error, packet nex.Pa
 
 		URL = proxyURL
 		formData = map[string]string{
-			"token": commonProtocol.DeriveProxyAuthToken(key, bucket, &expiresAt, int64(param.Size)),
+			"token": commonProtocol.DeriveProxyAuthToken(key, bucket, &expiresAt, maxObjectSize),
 		}
 	} else {
 		URL, formData, err = commonProtocol.S3Presigner.PostObject(bucket, key, time.Minute*15)
