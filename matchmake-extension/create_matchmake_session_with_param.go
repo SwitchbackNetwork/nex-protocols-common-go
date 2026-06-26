@@ -61,6 +61,8 @@ func (commonProtocol *CommonProtocol) createMatchmakeSessionWithParam(err error,
 
 	joinedMatchmakeSession.ParticipationCount = types.NewUInt32(participants)
 
+	createMatchmakeSessionParam.SourceMatchmakeSession = joinedMatchmakeSession.Copy().(match_making_types.MatchmakeSession)
+
 	rmcResponseStream := nex.NewByteStreamOut(endpoint.LibraryVersions(), endpoint.ByteStreamSettings())
 
 	joinedMatchmakeSession.WriteTo(rmcResponseStream)

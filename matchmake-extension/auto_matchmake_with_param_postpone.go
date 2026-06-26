@@ -81,6 +81,8 @@ func (commonProtocol *CommonProtocol) autoMatchmakeWithParamPostpone(err error, 
 
 	resultSession.ParticipationCount = types.NewUInt32(participants)
 
+	autoMatchmakeParam.SourceMatchmakeSession = resultSession.Copy().(match_making_types.MatchmakeSession)
+
 	commonProtocol.manager.Mutex.Unlock()
 
 	rmcResponseStream := nex.NewByteStreamOut(endpoint.LibraryVersions(), endpoint.ByteStreamSettings())
