@@ -5,6 +5,7 @@ import (
 	"github.com/PretendoNetwork/nex-go/v2/types"
 	_ "github.com/PretendoNetwork/nex-protocols-go/v2"
 	ticket_granting "github.com/PretendoNetwork/nex-protocols-go/v2/ticket-granting"
+	ticket_granting_types "github.com/PretendoNetwork/nex-protocols-go/v2/ticket-granting/types"
 
 	common_globals "github.com/PretendoNetwork/nex-protocols-common-go/v2/globals"
 )
@@ -20,9 +21,10 @@ type CommonProtocol struct {
 	SecureServerAccount        *nex.Account
 	SourceKeyFromToken         func(sourceAccount *nex.Account, loginData types.DataHolder) ([]byte, *nex.Error)
 	ValidateLoginData          func(pid types.PID, loginData types.DataHolder) *nex.Error
-	OnAfterLogin               func(packet nex.PacketInterface, strUserName types.String)
-	OnAfterLoginEx             func(packet nex.PacketInterface, strUserName types.String, oExtraData types.DataHolder)
-	OnAfterRequestTicket       func(packet nex.PacketInterface, idSource types.PID, idTarget types.PID)
+	OnAfterLogin                               func(packet nex.PacketInterface, strUserName types.String)
+	OnAfterLoginEx                             func(packet nex.PacketInterface, strUserName types.String, oExtraData types.DataHolder)
+	OnAfterRequestTicket                       func(packet nex.PacketInterface, idSource types.PID, idTarget types.PID)
+	OnAfterValidateAndRequestTicketWithParam   func(packet nex.PacketInterface, param ticket_granting_types.ValidateAndRequestTicketParam)
 }
 
 // DisableInsecureLogin disables the insecure Login method
@@ -58,7 +60,7 @@ func NewCommonProtocol(protocol ticket_granting.Interface) *CommonProtocol {
 	protocol.SetHandlerLogin(commonProtocol.login)
 	protocol.SetHandlerLoginEx(commonProtocol.loginEx)
 	protocol.SetHandlerRequestTicket(commonProtocol.requestTicket)
-
+	protocol.SetHandlerValidateAndRequestTicketWithParam(commonProtocol.validateAndRequestTicketWithParam)
 	commonProtocol.DisableInsecureLogin() // * Disable insecure login by default
 
 	return commonProtocol
